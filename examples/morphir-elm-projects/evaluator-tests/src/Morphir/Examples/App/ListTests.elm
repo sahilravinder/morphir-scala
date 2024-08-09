@@ -452,3 +452,106 @@ expected(2, []) = []
 listTakeTest : Int -> List a -> List a
 listTakeTest n list =
     List.take n list
+
+
+
+{-| Test: List/sum
+expected([1, 2, 3]) = 6
+expected([]) = 0
+-}
+listSumTest : List Int -> Int
+listSumTest list =
+    List.sum list
+
+
+{-| Test: List/product
+expected([1, 2, 3]) = 6
+expected([]) = 1
+-}
+listProductTest : List Int -> Int
+listProductTest list =
+    List.product list
+
+{-| Test: List/intersperse
+expected(", ", ["a", "b", "c"]) = ["a", ", ", "b", ", ", "c"]
+expected(", ", ["a"]) = ["a"]
+expected(", ", []) = []
+-}
+listIntersperseTest : a -> List a -> List a
+listIntersperseTest separator list =
+    List.intersperse separator list
+
+
+{-| Test: List/map2
+expected([1, 2, 3], [4, 5, 6]) = [5, 7, 9]
+expected([], [4, 5, 6]) = []
+expected([1, 2, 3], []) = []
+-}
+listMap2Test : List Int -> List Int -> List Int
+listMap2Test list1 list2 =
+    List.map2 (+) list1 list2
+
+{-| Test: List/map3 
+expected([1, 2, 3], [4, 5, 6], [7, 8, 9]) = [12, 15, 18]
+expected([], [4, 5, 6], [7, 8, 9]) = []
+expected([1, 2, 3], [], [7, 8, 9]) = []
+expected([1, 2, 3], [4, 5, 6], []) = []
+-}
+listMap3Test : List Int -> List Int -> List Int -> List Int
+listMap3Test list1 list2 list3 =
+    List.map3 (\a b c -> a + b + c) list1 list2 list3
+
+{-| Test: List/map4
+expected([1, 2, 3], [4, 5, 6], [7, 8, 9], [10, 11, 12]) = [22, 26, 30]
+expected([], [4, 5, 6], [7, 8, 9], [10, 11, 12]) = []
+expected([1, 2, 3], [], [7, 8, 9], [10, 11, 12]) = []
+expected([1, 2, 3], [4, 5, 6], [], [10, 11, 12]) = []
+expected([1, 2, 3], [4, 5, 6], [7, 8, 9], []) = []
+-}
+listMap4Test : List Int -> List Int -> List Int -> List Int -> List Int
+listMap4Test list1 list2 list3 list4 =
+    List.map4 (\a b c d -> a + b + c + d) list1 list2 list3 list4
+
+{-| Test: List/map5
+expected([1, 2, 3], [4, 5, 6], [7, 8, 9], [10, 11, 12], [13, 14, 15]) = [35, 40, 45]
+expected([], [4, 5, 6], [7, 8, 9], [10, 11, 12], [13, 14, 15]) = []
+expected([1, 2, 3], [], [7, 8, 9], [10, 11, 12], [13, 14, 15]) = []
+expected([1, 2, 3], [4, 5, 6], [], [10, 11, 12], [13, 14, 15]) = []
+expected([1, 2, 3], [4, 5, 6], [7, 8, 9], [], [13, 14, 15]) = []
+expected([1, 2, 3], [4, 5, 6], [7, 8, 9], [10, 11, 12], []) = []
+-}
+listMap5Test : List Int -> List Int -> List Int -> List Int -> List Int -> List Int
+listMap5Test list1 list2 list3 list4 list5 =
+    List.map5 (\a b c d e -> a + b + c + d + e) list1 list2 list3 list4 list5
+
+{-| Test: List/unzip
+expected([(1, 4), (2, 5), (3, 6)]) = ([1, 2, 3], [4, 5, 6])
+expected([]) = ([], [])
+-}
+listUnzipTest : List ( a, b ) -> ( List a, List b )
+listUnzipTest list =
+    List.unzip list
+
+-- {-| Test: List/innerJoin
+-- expected([1, 2, 3], [2, 3, 4], [3, 4, 5]) = [3]
+-- expected([], [2, 3, 4], [3, 4, 5]) = []
+-- expected([1, 2, 3], [], [3, 4, 5]) = []
+-- expected([1, 2, 3], [2, 3, 4], []) = []
+-- -}
+-- listInnerJoinTest : List Int -> List Int -> List Int -> List Int
+-- listInnerJoinTest list1 list2 list3 =
+--     List.innerJoin (\a b c -> a == b && b == c) list1 list2 list3
+
+-- {-| Test: List/outerJoin
+-- expected([1, 2, 3], [2, 3, 4], [3, 4, 5]) = [1, 4, 5]
+-- expected([], [2, 3, 4], [3, 4, 5]) = [2, 3]
+-- expected([1, 2, 3], [], [3, 4, 5]) = [1]
+-- expected([1, 2, 3], [2, 3, 4], []) = [4]
+-- -}
+-- listOuterJoinTest : List Int -> List Int -> List Int -> List Int
+-- listOuterJoinTest list1 list2 list3 =
+--     List.outerJoin (\a b c -> a == b && b == c) list1 list2 list3
+
+
+
+

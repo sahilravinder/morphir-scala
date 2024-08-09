@@ -5,6 +5,7 @@ import org.finos.morphir.naming._
 import org.finos.morphir.runtime.internal.NativeFunctionAdapter
 import org.finos.morphir.runtime.sdk._
 import org.finos.morphir.{Hints, ModuleDescriptor, MorphirTag, naming}
+import java.lang.annotation.Native
 
 object NativeSDK {
 
@@ -173,7 +174,17 @@ object NativeSDK {
           NativeFunctionAdapter.Fun2(ListSDK.repeat),
           NativeFunctionAdapter.Fun1(ListSDK.reverse),
           NativeFunctionAdapter.Fun1(ListSDK.tail),
-          NativeFunctionAdapter.Fun2(ListSDK.take)
+          NativeFunctionAdapter.Fun2(ListSDK.take),
+          NativeFunctionAdapter.Fun1(ListSDK.sum),
+          NativeFunctionAdapter.Fun1(ListSDK.product),
+          NativeFunctionAdapter.Fun2(ListSDK.intersperse),
+          NativeFunctionAdapter.Fun3(ListSDK.map2),
+          NativeFunctionAdapter.Fun4(ListSDK.map3),
+          NativeFunctionAdapter.Fun5(ListSDK.map4),
+          // NativeFunctionAdapter.Fun6(ListSDK.map5),
+          NativeFunctionAdapter.Fun1(ListSDK.unzip),
+          NativeFunctionAdapter.Fun3(ListSDK.innerJoin),
+          NativeFunctionAdapter.Fun3(ListSDK.outerJoin)
         )
       }
 

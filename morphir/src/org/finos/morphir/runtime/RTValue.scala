@@ -77,6 +77,20 @@ object RTValue {
         )
     }
 
+  def coerceTuple2(arg: RTValue) =
+    arg match {
+      case v: RTValue.Tuple =>
+        if (v.elements.length == 2) (v.elements(0), v.elements(1))
+        else
+          throw new FailedCoercion(
+            s"Cannot unwrap the value `${arg}` into a Tuple2 value. It is not a Tuple2-based result!"
+          )
+      case _ =>
+        throw new FailedCoercion(
+          s"Cannot unwrap the value `${arg}` into a Tuple2 value. It is not a Tuple2-based result!"
+        )
+    }
+
   def coerceBoolean(arg: RTValue) =
     arg match {
       case v: Primitive.Boolean => v

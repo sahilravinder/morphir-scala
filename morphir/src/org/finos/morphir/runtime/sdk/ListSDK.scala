@@ -261,4 +261,109 @@ object ListSDK {
       val result = listArg.elements.take(count)
       RTValue.List(result)
   }
+
+  val sum = DynamicNativeFunction1("sum") {
+    (_: NativeContext) => (listArg: RTValue.List) =>
+      val result = listArg.elements.foldLeft(RTValue.Primitive.Int(0)) {
+        case (RTValue.Primitive.Int(a), RTValue.Primitive.Int(b)) => RTValue.Primitive.Int(a + b)
+        case _                                                     => throw new IllegalValue(
+          s"Error performing a sum operation on the provided list. Incompatible types passed, expected Int, but got something else."
+        )
+      }
+      result
+  }
+
+  val product = DynamicNativeFunction1("product") {
+    (_: NativeContext) => (listArg: RTValue.List) =>
+      val result = listArg.elements.foldLeft(RTValue.Primitive.Int(1)) {
+        case (RTValue.Primitive.Int(a), RTValue.Primitive.Int(b)) => RTValue.Primitive.Int(a * b)
+        case _                                                     => throw new IllegalValue(
+          s"Error performing a product operation on the provided list. Incompatible types passed, expected Int, but got something else."
+        )
+        
+      }
+      result
+  }
+
+  val intersperse = DynamicNativeFunction2("intersperse") {
+    (context: NativeContext) => (separator: RTValue, list: RTValue.List) =>
+      val out = list.elements.flatMap { elem =>
+        List(elem, separator)
+      }.dropRight(1)
+      RTValue.List(out)
+  }
+
+  val map2 = DynamicNativeFunction3("map2") {
+    (context: NativeContext) => (f: RTValue.Function, listA: RTValue.List, listB: RTValue.List) =>
+      val out = listA.elements.zip(listB.elements).map { case (a, b) =>
+        context.evaluator.handleApplyResult2(Type.UType.Unit(()), f, a, b)
+      }
+      RTValue.List(out)
+  }
+
+  val map3 = DynamicNativeFunction4("map3") {
+    (context: NativeContext) =>
+      (f: RTValue.Function, listA: RTValue.List, listB: RTValue.List, listC: RTValue.List) =>
+        val out = listA.elements.zip(listB.elements).zip(listC.elements).map { case ((a, b), c) =>
+          context.evaluator.handleApplyResult3(Type.UType.Unit(()), f, a, b, c)
+        }
+        RTValue.List(out)
+  }
+
+  val map4 = DynamicNativeFunction5("map4") {
+    (context: NativeContext) =>
+      (f: RTValue.Function, listA: RTValue.List, listB: RTValue.List, listC: RTValue.List, listD: RTValue.List) =>
+        val out = listA.elements.zip(listB.elements).zip(listC.elements).zip(listD.elements).map {
+          case (((a, b), c), d) =>
+            context.evaluator.handleApplyResult4(Type.UType.Unit(()), f, a, b, c, d)
+        }
+        RTValue.List(out)
+  }
+
+  // val map5 = DynamicNativeFunction6("map5") {
+  //   (context: NativeContext) =>
+  //     (f: RTValue.Function, listA: RTValue.List, listB: RTValue.List, listC: RTValue.List, listD: RTValue.List, listE: RTValue.List) =>
+  //       val out = listA.elements.zip(listB.elements).zip(listC.elements).zip(listD.elements).zip(listE.elements).map {
+  //         case ((((a, b), c), d), e) =>
+  //           context.evaluator.handleApplyResult5(Type.UType.Unit(()), f, a, b, c, d, e)
+  //       }
+  //       RTValue.List(out)
+  // }
+
+  val unzip = DynamicNativeFunction1("unzip") {
+    (context: NativeContext) => (list: RTValue.List) =>
+      val (left, right) = list.elements.map(RTValue.coerceTuple2).unzip
+      RTValue.Tuple(RTValue.List(left), RTValue.List(right))
+  }
+
+  val innerJoin = DynamicNativeFunction3("innerJoin") {
+    (context: NativeContext) =>
+      (f: RTValue.Function, listA: RTValue.List, listB: RTValue.List) =>
+        val out = listA.elements.flatMap { a =>
+          listB.elements.flatMap { b =>
+            val result = context.evaluator.handleApplyResult2(Type.UType.Unit(()), f, a, b)
+            RTValue.coerceBoolean(result).value match {
+              case true  => Some(RTValue.Tuple(a, b))
+              case false => None
+            }
+          }
+        }
+        RTValue.List(out)
+  }
+
+  val outerJoin = DynamicNativeFunction3("outerJoin") {
+    (context: NativeContext) =>
+      (f: RTValue.Function, listA: RTValue.List, listB: RTValue.List) =>
+        val out = listA.elements.flatMap { a =>
+          listB.elements.flatMap { b =>
+            val result = context.evaluator.handleApplyResult2(Type.UType.Unit(()), f, a, b)
+            RTValue.coerceBoolean(result).value match {
+              case true  => Some(RTValue.Tuple(RTValue.Primitive.Boolean(true), a, b))
+              case false => Some(RTValue.Tuple(RTValue.Primitive.Boolean(false), a, b))
+            }
+          }
+        }
+        RTValue.List(out)
+  }
+
 }

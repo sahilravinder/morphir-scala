@@ -907,6 +907,109 @@ object EvaluatorMDMTests extends MorphirBaseSpec {
           )(
             Data.List.empty(Concept.Int32)
           )
+        ),
+        suite("sum")(
+          testEval("sums a list of integers")("listTests", "listSumTest", List(1, 2, 3))(
+            Data.Int32(6)
+          ),
+          // testEval("sums an empty list")("listTests", "listSumTest", Data.List.empty(Concept.Int32))(
+          //   Data.Int32(0)
+          // ),
+          // testEval("sums a list of floats")("listTests", "listSumTest", List(1.0, 2.0, 3.0))(
+          //   Data.Float(6.0)
+          // )
+        ),
+        suite("product")(
+          testEval("multiplies a list of integers")("listTests", "listProductTest", List(1, 2, 3))(
+            Data.Int32(6)
+          ),
+          // testEval("multiplies an empty list")("listTests", "listProductTest", Data.List.empty(Concept.Int32))(
+          //   Data.Int32(1)
+          // ),
+          // testEval("multiplies a list of floats")("listTests", "listProductTest", List(1.0, 2.0, 3.0))(
+          //   Data.Float(6.0)
+          // )
+        ),
+        suite("intersperse")(
+          // testEval("intersperses a list")("listTests", "listIntersperseTest", List(0, List(1, 2, 3)))(
+          //   Data.List(Data.Int(1), Data.Int(0), Data.Int(2), Data.Int(0), Data.Int(3))
+          // ),
+          // testEval("intersperses an empty list")("listTests", "listIntersperseTest", Data.List.empty(Concept.Int32))(
+          //   Data.List.empty(Concept.Int32)
+          // ),
+          // testEval("intersperses a singleton list")("listTests", "listIntersperseTest", List(0, List(1)))(
+          //   Data.List(Data.Int(1))
+          // ),
+          testEval("intersperses a list with a space separator")("listTests", "listIntersperseTest", List(Data.String(" "), List(Data.String("a"), Data.String("b"), Data.String("c"))))(
+            Data.List(Data.String("a"), Data.String(" "), Data.String("b"), Data.String(" "), Data.String("c"))
+          ) 
+        ),
+        suite("map2")(
+          testEval("maps two lists")("listTests", "listMap2Test", List(List(1, 2, 3), List(4, 5, 6)))(
+            Data.List(Data.Int(5), Data.Int(7), Data.Int(9))
+          ), 
+          // testEval("maps a list with an empty list")("listTests", "listMap2Test", List(Data.List.empty(Concept.Int32), List(1,2,3)))(
+          //   Data.List.empty(Concept.Int32)
+          // ),
+          // testEval("maps two empty lists")("listTests", "listMap2Test", List(Data.List.empty(Concept.Int32), Data.List.empty(Concept.Int32)))(
+          //   Data.List.empty(Concept.Int32)
+          // ),
+          // testEval("maps two lists with different lengths")("listTests", "listMap2Test", List(List(1, 2, 3), List(4, 5)))(
+          //   Data.List(Data.Int(5), Data.Int(7))
+          // )
+        ),
+        suite("map3")(
+          testEval("maps three lists")("listTests", "listMap3Test", List(List(1, 2, 3), List(4, 5, 6), List(7, 8, 9)))(
+            Data.List(Data.Int(12), Data.Int(15), Data.Int(18))
+          ),
+          // testEval("maps a list with two empty lists")("listTests", "listMap3Test", List(Data.List.empty(Concept.Int32), List(1,2,3), List(4,5,6)))(
+          //   Data.List.empty(Concept.Int32)
+          // ),
+          // testEval("maps three empty lists")("listTests", "listMap3Test", List(Data.List.empty(Concept.Int32), Data.List.empty(Concept.Int32), Data.List.empty(Concept.Int32)))(
+          //   Data.List.empty(Concept.Int32)
+          // ),
+          // testEval("maps three lists with different lengths")("listTests", "listMap3Test", List(List(1, 2, 3), List(4, 5), List(6, 7, 8)))(
+          //   Data.List(Data.Int(11), Data.Int(14))
+          // )
+        ),
+        suite("map4")(
+          testEval("maps four lists")("listTests", "listMap4Test", List(List(1, 2, 3), List(4, 5, 6), List(7, 8, 9), List(10, 11, 12)))(
+            Data.List(Data.Int(22), Data.Int(26), Data.Int(30))
+          ),
+          // testEval("maps a list with three empty lists")("listTests", "listMap4Test", List(Data.List.empty(Concept.Int32), List(1,2,3), List(4,5,6), List(7,8,9)))(
+          //   Data.List.empty(Concept.Int32)
+          // ),
+          // testEval("maps four empty lists")("listTests", "listMap4Test", List(Data.List.empty(Concept.Int32), Data.List.empty(Concept.Int32), Data.List.empty(Concept.Int32), Data.List.empty(Concept.Int32)))(
+          //   Data.List.empty(Concept.Int32)
+          // ),
+          // testEval("maps four lists with different lengths")("listTests", "listMap4Test", List(List(1, 2, 3), List(4, 5), List(6, 7, 8), List(9, 10, 11)))(
+          //   Data.List(Data.Int(20), Data.Int(24))
+          // )
+        ),
+        suite("map5")(
+          testEval("maps five lists")("listTests", "listMap5Test", List(List(1, 2, 3), List(4, 5, 6), List(7, 8, 9), List(10, 11, 12), List(13, 14, 15)))(
+            Data.List(Data.Int(35), Data.Int(40), Data.Int(45))
+          ),
+          // testEval("maps a list with four empty lists")("listTests", "listMap5Test", List(Data.List.empty(Concept.Int32), List(1,2,3), List(4,5,6), List(7,8,9), List(10,11,12)))(
+          //   Data.List.empty(Concept.Int32)
+          // ),
+          // testEval("maps empty lists")("listTests", "listMap5Test",  List(Data.List.empty(Concept.Int32), Data.List.empty(Concept.Int32), Data.List.empty(Concept.Int32), Data.List.empty(Concept.Int32), Data.List.empty(Concept.Int32)))(
+          //   Data.List.empty(Concept.Int32)
+          // )
+        ),
+        suite("unzip")(
+          testEval("unzips a list of tuples")("listTests", "listUnzipTest", List(Data.Tuple(Data.Int(1), Data.Int(2))))(
+            Data.Tuple(
+              Data.List(Data.Int(1)),
+              Data.List(Data.Int(2))
+            )
+          ),
+          testEval("unzips an empty list")("listTests", "listUnzipTest", Data.List.empty(Concept.Tuple(List(Concept.Int32, Concept.Int32))))(
+            Data.Tuple(
+              Data.List.empty(Concept.Int32),
+              Data.List.empty(Concept.Int32)
+            )
+          )
         )
       ),
       suite("Literals")(
