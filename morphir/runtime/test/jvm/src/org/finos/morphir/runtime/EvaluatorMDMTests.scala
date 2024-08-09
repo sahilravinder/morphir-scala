@@ -266,6 +266,135 @@ object EvaluatorMDMTests extends MorphirBaseSpec {
 
   def spec =
     suite("Evaluator MDM Specs")(
+      suite("Aggregate")(
+        testEvaluation("GroupBy")("aggregateTests", "aggregateGroupByTest")(
+          Data.Map(
+            (
+              Data.String("k2_1"),
+              Data.List(
+                Data.Tuple(Data.String("k2_1"), Data.Int32(1)),
+                Data.Tuple(Data.String("k2_1"), Data.Int32(2)),
+                Data.Tuple(Data.String("k2_1"), Data.Int32(5)),
+                Data.Tuple(Data.String("k2_1"), Data.Int32(6))
+              )
+            ),
+            (
+              Data.String("k2_2"),
+              Data.List(
+                Data.Tuple(Data.String("k2_2"), Data.Int32(3)),
+                Data.Tuple(Data.String("k2_2"), Data.Int32(4)),
+                Data.Tuple(Data.String("k2_2"), Data.Int32(7)),
+                Data.Tuple(Data.String("k2_2"), Data.Int32(8))
+              )
+            )
+          )
+        ),
+        testEvaluation("Map")("aggregateTests", "aggregateAggregateMapTest")(
+          Data.List(
+            Data.Tuple(Data.Tuple(Data.String("k1_1"), Data.Float(1.0)), Data.Float(10.0 / 1.0)),
+            Data.Tuple(Data.Tuple(Data.String("k1_1"), Data.Float(2.0)), Data.Float(10.0 / 2.0)),
+            Data.Tuple(Data.Tuple(Data.String("k1_1"), Data.Float(3.0)), Data.Float(10.0 / 3.0)),
+            Data.Tuple(Data.Tuple(Data.String("k1_1"), Data.Float(4.0)), Data.Float(10.0 / 4.0)),
+            Data.Tuple(Data.Tuple(Data.String("k1_2"), Data.Float(5.0)), Data.Float(26.0 / 5.0)),
+            Data.Tuple(Data.Tuple(Data.String("k1_2"), Data.Float(6.0)), Data.Float(26.0 / 6.0)),
+            Data.Tuple(Data.Tuple(Data.String("k1_2"), Data.Float(7.0)), Data.Float(26.0 / 7.0)),
+            Data.Tuple(Data.Tuple(Data.String("k1_2"), Data.Float(8.0)), Data.Float(26.0 / 8.0))
+          )
+        ),
+        testEvaluation("Map2")("aggregateTests", "aggregateAggregateMap2Test")(
+          Data.List(
+            Data.Tuple(Data.Tuple(Data.String("k1_1"), Data.Float(1.0)), Data.Float(10.0 * 4.0 / 1.0)),
+            Data.Tuple(Data.Tuple(Data.String("k1_1"), Data.Float(2.0)), Data.Float(10.0 * 4.0 / 2.0)),
+            Data.Tuple(Data.Tuple(Data.String("k1_1"), Data.Float(3.0)), Data.Float(10.0 * 4.0 / 3.0)),
+            Data.Tuple(Data.Tuple(Data.String("k1_1"), Data.Float(4.0)), Data.Float(10.0 * 4.0 / 4.0)),
+            Data.Tuple(Data.Tuple(Data.String("k1_2"), Data.Float(5.0)), Data.Float(26.0 * 8.0 / 5.0)),
+            Data.Tuple(Data.Tuple(Data.String("k1_2"), Data.Float(6.0)), Data.Float(26.0 * 8.0 / 6.0)),
+            Data.Tuple(Data.Tuple(Data.String("k1_2"), Data.Float(7.0)), Data.Float(26.0 * 8.0 / 7.0)),
+            Data.Tuple(Data.Tuple(Data.String("k1_2"), Data.Float(8.0)), Data.Float(26.0 * 8.0 / 8.0))
+          )
+        ),
+        testEvaluation("Map3")("aggregateTests", "aggregateAggregateMap3Test")(
+          Data.List(
+            Data.Tuple(Data.Tuple(Data.String("k1_1"), Data.Float(1.0)), Data.Float(10.0 * 4.0 / 1.0 + 1)),
+            Data.Tuple(Data.Tuple(Data.String("k1_1"), Data.Float(2.0)), Data.Float(10.0 * 4.0 / 2.0 + 1)),
+            Data.Tuple(Data.Tuple(Data.String("k1_1"), Data.Float(3.0)), Data.Float(10.0 * 4.0 / 3.0 + 1)),
+            Data.Tuple(Data.Tuple(Data.String("k1_1"), Data.Float(4.0)), Data.Float(10.0 * 4.0 / 4.0 + 1)),
+            Data.Tuple(Data.Tuple(Data.String("k1_2"), Data.Float(5.0)), Data.Float(26.0 * 8.0 / 5.0 + 5)),
+            Data.Tuple(Data.Tuple(Data.String("k1_2"), Data.Float(6.0)), Data.Float(26.0 * 8.0 / 6.0 + 5)),
+            Data.Tuple(Data.Tuple(Data.String("k1_2"), Data.Float(7.0)), Data.Float(26.0 * 8.0 / 7.0 + 5)),
+            Data.Tuple(Data.Tuple(Data.String("k1_2"), Data.Float(8.0)), Data.Float(26.0 * 8.0 / 8.0 + 5))
+          )
+        ),
+        testEvaluation("Map4")("aggregateTests", "aggregateAggregateMap4Test")(
+          Data.List(
+            Data.Tuple(Data.Tuple(Data.String("k1_1"), Data.Float(1.0)), Data.Float(10.0 * 4.0 / 1.0 + 1 + 2.5)),
+            Data.Tuple(Data.Tuple(Data.String("k1_1"), Data.Float(2.0)), Data.Float(10.0 * 4.0 / 2.0 + 1 + 2.5)),
+            Data.Tuple(Data.Tuple(Data.String("k1_1"), Data.Float(3.0)), Data.Float(10.0 * 4.0 / 3.0 + 1 + 2.5)),
+            Data.Tuple(Data.Tuple(Data.String("k1_1"), Data.Float(4.0)), Data.Float(10.0 * 4.0 / 4.0 + 1 + 2.5))
+          )
+        ),
+        testEvaluation("Count")("aggregateTests", "aggregateCountTest")(
+          Data.List(
+            Data.Float(4.0),
+            Data.Float(5.0),
+            Data.Float(6.0)
+          )
+        ),
+        testEvaluation("SumOf")("aggregateTests", "aggregateSumOfTest")(
+          Data.List(
+            Data.Float(7.0),
+            Data.Float(8.0),
+            Data.Float(9.0)
+          )
+        ),
+        testEvaluation("MinimumOf")("aggregateTests", "aggregateMinimumOfTest")(
+          Data.List(
+            Data.Float(2.0),
+            Data.Float(3.0),
+            Data.Float(4.0)
+          )
+        ),
+        testEvaluation("MaximumOf")("aggregateTests", "aggregateMaximumOfTest")(
+          Data.List(
+            Data.Float(6.0),
+            Data.Float(7.0),
+            Data.Float(8.0)
+          )
+        ),
+        testEvaluation("AverageOf")("aggregateTests", "aggregateAverageOfTest")(
+          Data.List(
+            Data.Float(3.0),
+            Data.Float(4.0),
+            Data.Float(5.0)
+          )
+        ),
+        testEvaluation("WeightedAverageOf")("aggregateTests", "aggregateWeightedAverageOfTest")(
+          Data.List(
+            Data.Float(3.0),
+            Data.Float(4.0),
+            Data.Float(5.0)
+          )
+        ),
+        testEvaluation("ByKey")("aggregateTests", "aggregateByKeyTest")(
+          Data.List(
+            Data.Float(3.0),
+            Data.Float(3.0),
+            Data.Float(3.0),
+            Data.Float(2.0),
+            Data.Float(2.0)
+          )
+        ),
+        testEvaluation("WithFilter")("aggregateTests", "aggregateWithFilterTest")(
+          Data.List(
+            Data.Float(6.0),
+            Data.Float(6.0),
+            Data.Float(6.0),
+            Data.Float(6.0),
+            Data.Float(6.0),
+            Data.Float(6.0)
+          )
+        )
+      ),
       suite("Char")(
         testEval("isUpper true")("charTests", "charIsUpperTest", 'A')(Data.Boolean(true)),
         testEval("isUpper false")("charTests", "charIsUpperTest", 'w')(Data.Boolean(false)),
@@ -357,7 +486,14 @@ object EvaluatorMDMTests extends MorphirBaseSpec {
             actual <- runTest("constructorTests", "lazyFunctionTest")
             expected = Data.Tuple(Data.Int(5), Data.Int(5))
           } yield assertTrue(actual == expected)
-        }
+        },
+        testEval("Implicit Constructor")("constructorTests", "implicitConstructorTest", "abcd")(
+          Data.Record(
+            FQName.fromString("Morphir.Examples.App:ConstructorTests:SomeRecord"),
+            (Label("name"), Data.String("abcd")),
+            (Label("number"), Data.Int(5))
+          )
+        )
       ),
       suite("Destructure Tests")(
         test("As") {
@@ -453,6 +589,15 @@ object EvaluatorMDMTests extends MorphirBaseSpec {
             "decimalShiftRight",
             List(Data.Int(4), Data.Decimal(12.345))
           )(Data.Decimal(123450.0))
+        ),
+        suite("creation")(
+          testEval("hundred")("decimalTests", "decimalHundred", 123)(Data.Decimal(12300)),
+          testEval("hundredth")("decimalTests", "decimalHundredth", 123)(Data.Decimal(BigDecimal("1.23"))),
+          testEval("million")("decimalTests", "decimalMillion", 123)(Data.Decimal(123000000)),
+          testEval("millionth")("decimalTests", "decimalMillionth", 123)(Data.Decimal(BigDecimal("0.000123"))),
+          testEval("tenth")("decimalTests", "decimalTenth", 123)(Data.Decimal(BigDecimal("12.3"))),
+          testEval("thousand")("decimalTests", "decimalThousand", 123)(Data.Decimal(123000)),
+          testEval("thousandth")("decimalTests", "decimalThousandth", 123)(Data.Decimal(BigDecimal("0.123")))
         ),
         suite("div")(
           testEvaluation("div some")("decimalTests", "decimalGoodDiv")(Data.Optional.Some(Data.Decimal(1.8))),
@@ -586,6 +731,26 @@ object EvaluatorMDMTests extends MorphirBaseSpec {
           Data.Int(5),
           Data.Int(6)
         )),
+        testEvaluation("Map2")("listTests", "listMap2Test")(Data.List(
+          Data.Int(6),
+          Data.Int(8),
+          Data.Int(10)
+        )),
+        testEvaluation("Map3")("listTests", "listMap3Test")(Data.List(
+          Data.Int(9),
+          Data.Int(12),
+          Data.Int(15)
+        )),
+        testEvaluation("Map4")("listTests", "listMap4Test")(Data.List(
+          Data.Int(12),
+          Data.Int(16),
+          Data.Int(20)
+        )),
+        testEvaluation("Map5")("listTests", "listMap5Test")(Data.List(
+          Data.Int(15),
+          Data.Int(20),
+          Data.Int(25)
+        )),
         testEval("MapDefinition")("listTests", "listMapDefinitionTest", List(1, 2, 3))(Data.List(
           Data.Int(2),
           Data.Int(3),
@@ -601,7 +766,7 @@ object EvaluatorMDMTests extends MorphirBaseSpec {
           Data.Float(5.0),
           Data.Float(6.0)
         )),
-        testEvaluation("Map2")("listTests", "listMapTest2")(Data.List(
+        testEvaluation("MapTest2")("listTests", "listMapTest2")(Data.List(
           Data.Boolean(false),
           Data.Boolean(true),
           Data.Boolean(false)
@@ -663,6 +828,33 @@ object EvaluatorMDMTests extends MorphirBaseSpec {
         testEvaluation("length")("listTests", "listLengthTest")(
           (Data.Int32(6))
         ),
+        testEvaluation("intersperse")("listTests", "listIntersperseTest")(Data.List(
+          Data.Int(2),
+          Data.Int(1),
+          Data.Int(3),
+          Data.Int(1),
+          Data.Int(4)
+        )),
+        testEvaluation("unzip")("listTests", "listUnzipTest")(Data.Tuple(
+          Data.List(Data.Int(1), Data.Int(2)),
+          Data.List(Data.String("a"), Data.String("b"))
+        )),
+        testEvaluation("innerJoin")("listTests", "listInnerJoinTest")(Data.List(
+          Data.Tuple(
+            Data.Tuple(Data.Int(2), Data.String("b")),
+            Data.Tuple(Data.Int(2), Data.String("B"))
+          )
+        )),
+        testEvaluation("leftJoin")("listTests", "listLeftJoinTest")(Data.List(
+          Data.Tuple(
+            Data.Tuple(Data.Int(1), Data.String("a")),
+            Data.Optional.None(Concept.Tuple(List(Concept.Int32, Concept.String)))
+          ),
+          Data.Tuple(
+            Data.Tuple(Data.Int(2), Data.String("b")),
+            Data.Optional.Some(Data.Tuple(Data.Int(2), Data.String("B")))
+          )
+        )),
         suite("all")(
           testEval("predicate is true for all")("listTests", "listAllTest", List(1, 2, 3))(
             Data.Boolean(true)
@@ -909,106 +1101,47 @@ object EvaluatorMDMTests extends MorphirBaseSpec {
           )
         ),
         suite("sum")(
-          testEval("sums a list of integers")("listTests", "listSumTest", List(1, 2, 3))(
-            Data.Int32(6)
+          testEval("sum a list of ints returns sum of ints")("listTests", "listSumTest", List(1, 2))(
+            Data.Int(3)
           ),
-          // testEval("sums an empty list")("listTests", "listSumTest", Data.List.empty(Concept.Int32))(
-          //   Data.Int32(0)
-          // ),
-          // testEval("sums a list of floats")("listTests", "listSumTest", List(1.0, 2.0, 3.0))(
-          //   Data.Float(6.0)
-          // )
+          testEvaluation("sum a list of floats returns sum of floats")("listTests", "listSumFloatTest")(
+            Data.Float(3.0)
+          ),
+          testEval("sum a list of decimals returns sum of decimals")(
+            "listTests",
+            "listSumTest",
+            Data.List(Data.Decimal(BigDecimal("1.0")), Data.Decimal(BigDecimal("2.0")))
+          )(
+            Data.Decimal(BigDecimal("3.0"))
+          ),
+          testEval("sum an empty list returns 0")(
+            "listTests",
+            "listSumTest",
+            Data.List.empty(Concept.Int32)
+          )(
+            Data.Int(0)
+          )
         ),
         suite("product")(
-          testEval("multiplies a list of integers")("listTests", "listProductTest", List(1, 2, 3))(
-            Data.Int32(6)
+          testEval("multiply a list of ints returns product of ints")("listTests", "listProductTest", List(1, 2))(
+            Data.Int(2)
           ),
-          // testEval("multiplies an empty list")("listTests", "listProductTest", Data.List.empty(Concept.Int32))(
-          //   Data.Int32(1)
-          // ),
-          // testEval("multiplies a list of floats")("listTests", "listProductTest", List(1.0, 2.0, 3.0))(
-          //   Data.Float(6.0)
-          // )
-        ),
-        suite("intersperse")(
-          // testEval("intersperses a list")("listTests", "listIntersperseTest", List(0, List(1, 2, 3)))(
-          //   Data.List(Data.Int(1), Data.Int(0), Data.Int(2), Data.Int(0), Data.Int(3))
-          // ),
-          // testEval("intersperses an empty list")("listTests", "listIntersperseTest", Data.List.empty(Concept.Int32))(
-          //   Data.List.empty(Concept.Int32)
-          // ),
-          // testEval("intersperses a singleton list")("listTests", "listIntersperseTest", List(0, List(1)))(
-          //   Data.List(Data.Int(1))
-          // ),
-          testEval("intersperses a list with a space separator")("listTests", "listIntersperseTest", List(Data.String(" "), List(Data.String("a"), Data.String("b"), Data.String("c"))))(
-            Data.List(Data.String("a"), Data.String(" "), Data.String("b"), Data.String(" "), Data.String("c"))
-          ) 
-        ),
-        suite("map2")(
-          testEval("maps two lists")("listTests", "listMap2Test", List(List(1, 2, 3), List(4, 5, 6)))(
-            Data.List(Data.Int(5), Data.Int(7), Data.Int(9))
-          ), 
-          // testEval("maps a list with an empty list")("listTests", "listMap2Test", List(Data.List.empty(Concept.Int32), List(1,2,3)))(
-          //   Data.List.empty(Concept.Int32)
-          // ),
-          // testEval("maps two empty lists")("listTests", "listMap2Test", List(Data.List.empty(Concept.Int32), Data.List.empty(Concept.Int32)))(
-          //   Data.List.empty(Concept.Int32)
-          // ),
-          // testEval("maps two lists with different lengths")("listTests", "listMap2Test", List(List(1, 2, 3), List(4, 5)))(
-          //   Data.List(Data.Int(5), Data.Int(7))
-          // )
-        ),
-        suite("map3")(
-          testEval("maps three lists")("listTests", "listMap3Test", List(List(1, 2, 3), List(4, 5, 6), List(7, 8, 9)))(
-            Data.List(Data.Int(12), Data.Int(15), Data.Int(18))
+          testEvaluation("sum a list of floats returns sum of floats")("listTests", "listProductFloatTest")(
+            Data.Float(2.0)
           ),
-          // testEval("maps a list with two empty lists")("listTests", "listMap3Test", List(Data.List.empty(Concept.Int32), List(1,2,3), List(4,5,6)))(
-          //   Data.List.empty(Concept.Int32)
-          // ),
-          // testEval("maps three empty lists")("listTests", "listMap3Test", List(Data.List.empty(Concept.Int32), Data.List.empty(Concept.Int32), Data.List.empty(Concept.Int32)))(
-          //   Data.List.empty(Concept.Int32)
-          // ),
-          // testEval("maps three lists with different lengths")("listTests", "listMap3Test", List(List(1, 2, 3), List(4, 5), List(6, 7, 8)))(
-          //   Data.List(Data.Int(11), Data.Int(14))
-          // )
-        ),
-        suite("map4")(
-          testEval("maps four lists")("listTests", "listMap4Test", List(List(1, 2, 3), List(4, 5, 6), List(7, 8, 9), List(10, 11, 12)))(
-            Data.List(Data.Int(22), Data.Int(26), Data.Int(30))
+          testEval("multiply a list of decimals returns product of decimals")(
+            "listTests",
+            "listProductTest",
+            Data.List(Data.Decimal(BigDecimal("1.0")), Data.Decimal(BigDecimal("2.0")))
+          )(
+            Data.Decimal(BigDecimal("2.0"))
           ),
-          // testEval("maps a list with three empty lists")("listTests", "listMap4Test", List(Data.List.empty(Concept.Int32), List(1,2,3), List(4,5,6), List(7,8,9)))(
-          //   Data.List.empty(Concept.Int32)
-          // ),
-          // testEval("maps four empty lists")("listTests", "listMap4Test", List(Data.List.empty(Concept.Int32), Data.List.empty(Concept.Int32), Data.List.empty(Concept.Int32), Data.List.empty(Concept.Int32)))(
-          //   Data.List.empty(Concept.Int32)
-          // ),
-          // testEval("maps four lists with different lengths")("listTests", "listMap4Test", List(List(1, 2, 3), List(4, 5), List(6, 7, 8), List(9, 10, 11)))(
-          //   Data.List(Data.Int(20), Data.Int(24))
-          // )
-        ),
-        suite("map5")(
-          testEval("maps five lists")("listTests", "listMap5Test", List(List(1, 2, 3), List(4, 5, 6), List(7, 8, 9), List(10, 11, 12), List(13, 14, 15)))(
-            Data.List(Data.Int(35), Data.Int(40), Data.Int(45))
-          ),
-          // testEval("maps a list with four empty lists")("listTests", "listMap5Test", List(Data.List.empty(Concept.Int32), List(1,2,3), List(4,5,6), List(7,8,9), List(10,11,12)))(
-          //   Data.List.empty(Concept.Int32)
-          // ),
-          // testEval("maps empty lists")("listTests", "listMap5Test",  List(Data.List.empty(Concept.Int32), Data.List.empty(Concept.Int32), Data.List.empty(Concept.Int32), Data.List.empty(Concept.Int32), Data.List.empty(Concept.Int32)))(
-          //   Data.List.empty(Concept.Int32)
-          // )
-        ),
-        suite("unzip")(
-          testEval("unzips a list of tuples")("listTests", "listUnzipTest", List(Data.Tuple(Data.Int(1), Data.Int(2))))(
-            Data.Tuple(
-              Data.List(Data.Int(1)),
-              Data.List(Data.Int(2))
-            )
-          ),
-          testEval("unzips an empty list")("listTests", "listUnzipTest", Data.List.empty(Concept.Tuple(List(Concept.Int32, Concept.Int32))))(
-            Data.Tuple(
-              Data.List.empty(Concept.Int32),
-              Data.List.empty(Concept.Int32)
-            )
+          testEval("multiply an empty list returns 0")(
+            "listTests",
+            "listProductTest",
+            Data.List.empty(Concept.Int32)
+          )(
+            Data.Int(0)
           )
         )
       ),
@@ -3174,6 +3307,14 @@ object EvaluatorMDMTests extends MorphirBaseSpec {
           testEvaluation("degrees")("sdkBasicsTests", "sdkDegreesTest")(Data.Float(3.141592653589793)),
           testEvaluation("radians")("sdkBasicsTests", "sdkRadiansTest")(Data.Float(3.141592653589793)),
           testEvaluation("turns")("sdkBasicsTests", "sdkTurnsTest")(Data.Float(3.141592653589793)),
+          testEvaluation("toPolar")("sdkBasicsTests", "sdkToPolarTest")(Data.Tuple(
+            Data.Float(5),
+            Data.Float(0.9272952180016122)
+          )),
+          testEvaluation("fromPolar")("sdkBasicsTests", "sdkFromPolarTest")(Data.Tuple(
+            Data.Float(1.2247448713915892),
+            Data.Float(0.7071067811865475)
+          )),
           testEval("Ceiling")("sdkBasicsTests", "basicsCeilingTest", 3.88)(Data.Int(4)),
           testEval("Ceiling whole number")("sdkBasicsTests", "basicsCeilingTest", 3.0)(Data.Int(3)),
           testEval("Floor")("sdkBasicsTests", "basicsFloorTest", 3.88)(Data.Int(3)),
@@ -3182,7 +3323,9 @@ object EvaluatorMDMTests extends MorphirBaseSpec {
           testEval("Truncate 2")("sdkBasicsTests", "basicsTruncateTest", -1.2)(Data.Int(-1)),
           testEval("Truncate 3")("sdkBasicsTests", "basicsTruncateTest", .4)(Data.Int(0)),
           testEval("Truncate 4")("sdkBasicsTests", "basicsTruncateTest", -.4)(Data.Int(0)),
-          testEval("Abs")("sdkBasicsTests", "basicsAbsTest", Data.Float(-5.0))(Data.Float(5.0))
+          testEval("Abs")("sdkBasicsTests", "basicsAbsTest", Data.Float(-5.0))(Data.Float(5.0)),
+          testEval("Round up")("sdkBasicsTests", "basicsRoundTest", Data.Float(1.6))(Data.Int(2)),
+          testEval("Round down")("sdkBasicsTests", "basicsRoundTest", Data.Float(1.4))(Data.Int(1))
         ),
         suite("Int")(
           testEvaluation("Plus")("sdkBasicsTests", "sdkAddTest")(Data.Int(3)),

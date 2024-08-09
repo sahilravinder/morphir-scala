@@ -199,6 +199,58 @@ listMapTest ctx =
         map (\n -> n + 1) [ 3, 4, 5 ]
 
 
+{-| Test: List/Map2
+expected = [6,8,10]
+-}
+listMap2Test : TestContext -> List Int
+listMap2Test ctx =
+    let
+        numbers =
+            [ 3, 4, 5 ]
+    in
+    test ctx <|
+        map2 (\a b -> a + b) numbers numbers
+
+
+{-| Test: List/Map3
+expected = [9,12,15]
+-}
+listMap3Test : TestContext -> List Int
+listMap3Test ctx =
+    let
+        numbers =
+            [ 3, 4, 5 ]
+    in
+    test ctx <|
+        map3 (\a b c -> a + b + c) numbers numbers numbers
+
+
+{-| Test: List/Map4
+expected = [12,16,20]
+-}
+listMap4Test : TestContext -> List Int
+listMap4Test ctx =
+    let
+        numbers =
+            [ 3, 4, 5 ]
+    in
+    test ctx <|
+        map4 (\a b c d -> a + b + c + d) numbers numbers numbers numbers
+
+
+{-| Test: List/Map5
+expected = [15,20,25]
+-}
+listMap5Test : TestContext -> List Int
+listMap5Test ctx =
+    let
+        numbers =
+            [ 3, 4, 5 ]
+    in
+    test ctx <|
+        map5 (\a b c d e -> a + b + c + d + e) numbers numbers numbers numbers numbers
+
+
 {-| Test: List/Map Native
 expected = [3.0,4.0,5.0]
 -}
@@ -454,104 +506,93 @@ listTakeTest n list =
     List.take n list
 
 
-
 {-| Test: List/sum
-expected([1, 2, 3]) = 6
-expected([]) = 0
+expected(1, 2) = 3
 -}
-listSumTest : List Int -> Int
+listSumTest : List number -> number
 listSumTest list =
     List.sum list
 
 
-{-| Test: List/product
-expected([1, 2, 3]) = 6
-expected([]) = 1
+{-| Test: List/sum
+expected = 3.0
 -}
-listProductTest : List Int -> Int
+listSumFloatTest : TestContext -> Float
+listSumFloatTest ctx =
+    test ctx <|
+        sum [ 1.0, 2.0 ]
+
+
+{-| Test: List/product
+expected(1, 2) = 2
+-}
+listProductTest : List number -> number
 listProductTest list =
     List.product list
 
+
+{-| Test: List/product
+expected = 2.0
+-}
+listProductFloatTest : TestContext -> Float
+listProductFloatTest ctx =
+    test ctx <|
+        product [ 1.0, 2.0 ]
+
+
 {-| Test: List/intersperse
-expected(", ", ["a", "b", "c"]) = ["a", ", ", "b", ", ", "c"]
-expected(", ", ["a"]) = ["a"]
-expected(", ", []) = []
+expected = [2, 1, 3, 1, 4]
 -}
-listIntersperseTest : a -> List a -> List a
-listIntersperseTest separator list =
-    List.intersperse separator list
+listIntersperseTest : TestContext -> List Int
+listIntersperseTest ctx =
+    test ctx <|
+        intersperse 1 [ 2, 3, 4 ]
 
-
-{-| Test: List/map2
-expected([1, 2, 3], [4, 5, 6]) = [5, 7, 9]
-expected([], [4, 5, 6]) = []
-expected([1, 2, 3], []) = []
--}
-listMap2Test : List Int -> List Int -> List Int
-listMap2Test list1 list2 =
-    List.map2 (+) list1 list2
-
-{-| Test: List/map3 
-expected([1, 2, 3], [4, 5, 6], [7, 8, 9]) = [12, 15, 18]
-expected([], [4, 5, 6], [7, 8, 9]) = []
-expected([1, 2, 3], [], [7, 8, 9]) = []
-expected([1, 2, 3], [4, 5, 6], []) = []
--}
-listMap3Test : List Int -> List Int -> List Int -> List Int
-listMap3Test list1 list2 list3 =
-    List.map3 (\a b c -> a + b + c) list1 list2 list3
-
-{-| Test: List/map4
-expected([1, 2, 3], [4, 5, 6], [7, 8, 9], [10, 11, 12]) = [22, 26, 30]
-expected([], [4, 5, 6], [7, 8, 9], [10, 11, 12]) = []
-expected([1, 2, 3], [], [7, 8, 9], [10, 11, 12]) = []
-expected([1, 2, 3], [4, 5, 6], [], [10, 11, 12]) = []
-expected([1, 2, 3], [4, 5, 6], [7, 8, 9], []) = []
--}
-listMap4Test : List Int -> List Int -> List Int -> List Int -> List Int
-listMap4Test list1 list2 list3 list4 =
-    List.map4 (\a b c d -> a + b + c + d) list1 list2 list3 list4
-
-{-| Test: List/map5
-expected([1, 2, 3], [4, 5, 6], [7, 8, 9], [10, 11, 12], [13, 14, 15]) = [35, 40, 45]
-expected([], [4, 5, 6], [7, 8, 9], [10, 11, 12], [13, 14, 15]) = []
-expected([1, 2, 3], [], [7, 8, 9], [10, 11, 12], [13, 14, 15]) = []
-expected([1, 2, 3], [4, 5, 6], [], [10, 11, 12], [13, 14, 15]) = []
-expected([1, 2, 3], [4, 5, 6], [7, 8, 9], [], [13, 14, 15]) = []
-expected([1, 2, 3], [4, 5, 6], [7, 8, 9], [10, 11, 12], []) = []
--}
-listMap5Test : List Int -> List Int -> List Int -> List Int -> List Int -> List Int
-listMap5Test list1 list2 list3 list4 list5 =
-    List.map5 (\a b c d e -> a + b + c + d + e) list1 list2 list3 list4 list5
 
 {-| Test: List/unzip
-expected([(1, 4), (2, 5), (3, 6)]) = ([1, 2, 3], [4, 5, 6])
-expected([]) = ([], [])
+expected = ( [ 1, 2], ["a", "b"] )
 -}
-listUnzipTest : List ( a, b ) -> ( List a, List b )
-listUnzipTest list =
-    List.unzip list
-
--- {-| Test: List/innerJoin
--- expected([1, 2, 3], [2, 3, 4], [3, 4, 5]) = [3]
--- expected([], [2, 3, 4], [3, 4, 5]) = []
--- expected([1, 2, 3], [], [3, 4, 5]) = []
--- expected([1, 2, 3], [2, 3, 4], []) = []
--- -}
--- listInnerJoinTest : List Int -> List Int -> List Int -> List Int
--- listInnerJoinTest list1 list2 list3 =
---     List.innerJoin (\a b c -> a == b && b == c) list1 list2 list3
-
--- {-| Test: List/outerJoin
--- expected([1, 2, 3], [2, 3, 4], [3, 4, 5]) = [1, 4, 5]
--- expected([], [2, 3, 4], [3, 4, 5]) = [2, 3]
--- expected([1, 2, 3], [], [3, 4, 5]) = [1]
--- expected([1, 2, 3], [2, 3, 4], []) = [4]
--- -}
--- listOuterJoinTest : List Int -> List Int -> List Int -> List Int
--- listOuterJoinTest list1 list2 list3 =
---     List.outerJoin (\a b c -> a == b && b == c) list1 list2 list3
+listUnzipTest : TestContext -> ( List Int, List String )
+listUnzipTest ctx =
+    test ctx <|
+        unzip [ ( 1, "a" ), ( 2, "b" ) ]
 
 
+{-| Test: List/innerJoin
+expected = [ ( ( 2, "b" ), ( 2, "B" ) ) ]
+-}
+listInnerJoinTest : TestContext -> List ( ( Int, String ), ( Int, String ) )
+listInnerJoinTest ctx =
+    let
+        dataSetA =
+            [ ( 1, "a" ), ( 2, "b" ) ]
+
+        dataSetB =
+            [ ( 3, "C" ), ( 2, "B" ) ]
+    in
+    test ctx <|
+        dataSetA
+            |> innerJoin dataSetB
+                (\a b ->
+                    Tuple.first a == Tuple.first b
+                )
 
 
+{-| Test: List/leftJoin
+expected = [ ( ( 1, "a" ), Nothing ), ( ( 2, "b" ), Just ( 2, "B" ) ) ]
+-}
+listLeftJoinTest : TestContext -> List ( ( Int, String ), Maybe ( Int, String ) )
+listLeftJoinTest ctx =
+    let
+        dataSetA =
+            [ ( 1, "a" ), ( 2, "b" ) ]
+
+        dataSetB =
+            [ ( 3, "C" ), ( 2, "B" ) ]
+    in
+    test ctx <|
+        dataSetA
+            |> leftJoin dataSetB
+                (\a b ->
+                    Tuple.first a == Tuple.first b
+                )
