@@ -31,6 +31,13 @@ object UnitTesting {
   def expectationType = T.reference("Morphir.UnitTest", "Expect", "Expectation")
   def testPrefix      = "Morphir.UnitTest:Test:"
   def expectPrefix    = "Morphir.UnitTest:Expect:"
+  def testPackagePath = fqn"Morphir.UnitTest:Test:foo".packagePath
+
+  def containsTestCode(
+      fqn: FQName,
+      definition: TypedDefinition
+  ): Boolean =
+    fqn.packagePath == testPackagePath || definition.outputType == testType
 
   /**
    * Run all tests in the given distributions. By this point, the distributions need to include the actual test
@@ -44,10 +51,15 @@ object UnitTesting {
   ): RTAction[MorphirEnv, Nothing, TestSummary] = {
     val globals = GlobalDefs.fromDistributions(dists)
     RTAction.environmentWithPure[MorphirSdk] { env =>
-      val testNames = collectTests(globals)
-      val testIRs   = testNames.map(fqn => Value.Reference.Typed(testType, fqn))
+      val testNames            = collectTests(globals)
+      val userDefinedFunctions = collectNonTests(globals)
+      val testIRs              = testNames.map(fqn => Value.Reference.Typed(testType, fqn))
       if (testIRs.isEmpty) {
-        val emptySummary = TestSummary("No tests run", Map())
+        val emptySummary = TestSummary(
+          "No tests run",
+          Map(),
+          CoverageInfo(Set.empty[FQName], userDefinedFunctions, CoverageCounts.empty)
+        )
         RTAction.succeed(emptySummary)
       } else {
         val testSuiteIR = if (testIRs.length == 1)
@@ -93,13 +105,19 @@ object UnitTesting {
 
         if (detailedReport.passed == simplePassed)
           RTAction.succeed(detailedReport)
-          // If the results were different, something went wrong in our test framework - it either hid an error, or created one that didn't exist in the simple pass
+        // If the results were different, something went wrong in our test framework - it either hid an error, or created one that didn't exist in the simple pass
         else if (detailedReport.passed && (!simplePassed))
-          throw new InvalidState(s"""Detailed Test Report passed, but simple morphir-based testing failed.
-          Detailed:  $detailedReport""")
+          throw InvalidState(
+            s"""Detailed Test Report passed, but simple morphir-based testing failed.
+          Detailed:  $detailedReport""",
+            location = None
+          )
         else
-          throw new InvalidState(s"""Detailed Test Report found failures, but simple morphir-based testing passed.
-          Detailed:  $detailedReport""")
+          throw InvalidState(
+            s"""Detailed Test Report found failures, but simple morphir-based testing passed.
+          Detailed:  $detailedReport""",
+            location = None
+          )
       }
     }
   }
@@ -177,11 +195,21 @@ object UnitTesting {
             )
           }.toList
       ).resolveOnly // "Only" requires special handling, so do that here
-        // User-defined thunks, and non-introspected expect calls (the magic SDK functions) are run here
+    // User-defined thunks, and non-introspected expect calls (the magic SDK functions) are run here
     val withExpects = TestSet.getExpects(newGlobals, testSet)
     // And then the generated thunks are introspected, giving us our final SingleTestResults
     val withResults = TestSet.processExpects(newGlobals, withExpects)
-    TestSet.toSummary(withResults)
+
+    // begin collecting coverage related information
+    val userDefinedFunctions = collectNonTests(globals)
+    val referencedFunctions  = testNames.flatMap(name => GlobalDefs.getStaticallyReachable(name, globals)).toSet
+    val coverageInfo = CoverageInfo(
+      referencedFunctions,
+      userDefinedFunctions,
+      CoverageCounts.getCounts(userDefinedFunctions, referencedFunctions)
+    )
+
+    TestSet.toSummary(coverageInfo, withResults)
   }
 
   /**
@@ -205,4 +233,17 @@ object UnitTesting {
     tests
   }
 
+  /**
+   * The inverse of collect Tests - returns non test definitions
+   *
+   * @param globals
+   *   The global definitions to collect non tests from
+   */
+  private[runtime] def collectNonTests(
+      globals: GlobalDefs
+  ): Set[FQName] =
+    globals.definitions.collect {
+      case (fqn -> SDKValue.SDKValueDefinition(definition: TypedDefinition))
+          if !containsTestCode(fqn, definition) => fqn
+    }.toSet
 }

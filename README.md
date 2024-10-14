@@ -127,8 +127,35 @@ For your convience, you can run the morphir-runtime tests using the following co
 ./build.sh test-runtime-jvm
 ```
 
+#### Test Coverage
 
-#### Formatting Code
+Before checking test coverage, ensure that all tests have been run using the following command:
+
+```bash
+./mill __.test
+```
+
+##### HTML Coverage Report
+
+To generate a human-readable coverage report, run the following command:
+
+```bash
+./mill scoverage.htmlReportAll
+```
+
+To view the resulting coverage report, open `out/scoverage/htmlReportAll.dest/index.html`
+
+##### XML Coverage Report
+
+To generate an XML coverage report, run the following command:
+
+```bash
+./mill scoverage.xmlReportAll
+```
+
+The report will be generated at this location `out/scoverage/xmlReportAll.dest/scoverage.xml`
+
+#### Formatting Scala Code
 
 Code needs to be formatted according to `scalafmt` rules. To run `scalafmt` on all the source code using:
 
@@ -149,6 +176,22 @@ or in watch mode to reformat changed files:
 ```bash
 ./mill -w mill.scalalib.scalafmt.ScalafmtModule/reformatAll __.sources
 ```
+
+#### Formatting Elm Code
+
+The evaluator tests utilize elm code. To reformat the elm code for those tests:
+
+```bash
+elm-format --elm-version=0.19 examples/morphir-elm-projects/evaluator-tests/src/Morphir/Examples/App/*.elm
+```
+
+If you don't have elm-format installed, you can either install it through npm or a different package manager like brew:
+
+```bash
+npm install -g elm-format
+```
+
+Alternatively, this can be done directly via `npm run format`, which is documented [here](https://github.com/finos/morphir-scala/blob/main/examples/morphir-elm-projects/evaluator-tests/ReadMe.md)
 
 #### IntelliJ Setup for Windows
 
@@ -186,6 +229,10 @@ or in watch mode:
 ```
 .\mill -i -w __.test
 ```
+
+#### Elm Tests
+
+Documentation for the elm tests are located at [examples/morphir-elm-projects/evaluator-tests/ReadMe.md](https://github.com/finos/morphir-scala/blob/main/examples/morphir-elm-projects/evaluator-tests/ReadMe.md)
 
 #### Formatting Code
 
